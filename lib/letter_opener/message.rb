@@ -33,7 +33,7 @@ module LetterOpener
     def render
       FileUtils.mkdir_p(@location)
 
-      if mail.attachments.any?
+      if mail.attachments.present?
         attachments_dir = File.join(@location, 'attachments')
         FileUtils.mkdir_p(attachments_dir)
         mail.attachments.each do |attachment|
@@ -68,7 +68,7 @@ module LetterOpener
       @body ||= begin
         body = (@part && @part.body || @mail.body).to_s
 
-        mail.attachments.each do |attachment|
+        mail.attachments && mail.attachments.each do |attachment|
           body.gsub!(attachment.url, "attachments/#{attachment.filename}")
         end
 
